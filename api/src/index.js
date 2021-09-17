@@ -15,7 +15,7 @@ app.get('/produto', async (req, resp) => {
         let l = await db.tb_produto.findAll({order: [['id_produto', 'desc']]});
         resp.send(l);
     } catch (e) {
-        resp.send({ erro: 'GET erro' })
+        resp.send({ erro: e.toString() })
     }
 }) 
 
@@ -31,15 +31,15 @@ app.post('/produto', async (req, resp) => {
         } else {
 
             if(nome == "" ||categoria == "" ||precopor == "" ||avaliacao == "" ||descricao == "" ||qtdestoque == "" ||imagem == "" ||ativo == "" ||dtinclusao == "" ||precode == "")
-                resp.send({ erro: "Algum campo foi preenchido de maneira errada"})
+                return resp.send({ erro: "Algum campo está vazio"})
 
             if(avaliacao <= 0 || qtdestoque <= 0 || precode <= 0 || precopor <= 0)
-                resp.send({ erro: "Valores tem que ser maiores que zero" })  
+                return resp.send({ erro: "Valores tem que ser maiores que zero" })
 
-            if(isNaN(precode) || isNaN(precopor) || isNaN(avaliacao)|| isNaN(estoque))
-                resp.send({ erro: "Não é possivel usar textos em campos de números"})
+            if(isNaN(precode) || isNaN(precopor) || isNaN(avaliacao)|| isNaN(qtdestoque))
+                return resp.send({ erro: "Não é possivel usar textos em campos de números"})
            
-                let i = await db.tb_produto.create({ 
+                let r = await db.tb_produto.create({ 
                     nm_produto: nome, 
                     ds_categoria: categoria, 
                     vl_preco_de: precode,
@@ -51,12 +51,12 @@ app.post('/produto', async (req, resp) => {
                     bt_ativo: ativo,
                     dt_inclusao: dtinclusao
                 })
-                resp.send(i);
+                resp.send(r);
             
         }
         
     } catch (e) {
-        resp.send({ erro: 'POST erro' })
+        resp.send({ erro: e.toString() })
     }
 }) 
 
@@ -82,7 +82,7 @@ app.put('/produto/:id', async (req, resp) => {
         })
         resp.sendStatus(200);
     } catch (e) {
-        resp.send({ erro: 'PUT erro' })
+        resp.send({ erro: e.toString() })
     }
 }) 
 
@@ -94,7 +94,7 @@ app.delete('/produto/:id', async (req, resp) => {
         await db.tb_produto.destroy({ where: { id_produto: id }})
         resp.send(200);
     } catch (e) {
-        resp.send({ erro: 'DELETE erro' })
+        resp.send({ erro: e.toString() })
     }
 }) 
 
