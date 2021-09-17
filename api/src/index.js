@@ -31,7 +31,7 @@ app.post('/produto', async (req, resp) => {
         } else {
 
             if(nome == "" ||categoria == "" ||precopor == "" ||avaliacao == "" ||descricao == "" ||qtdestoque == "" ||imagem == "" ||ativo == "" ||dtinclusao == "" ||precode == "")
-                resp.send({ erro: "Algum campo está nulo"})
+                resp.send({ erro: "Algum campo foi preenchido de maneira errada"})
 
             if(avaliacao <= 0 || qtdestoque <= 0 || precode <= 0 || precopor <= 0)
                 resp.send({ erro: "Valores tem que ser maiores que zero" })  
